@@ -8,7 +8,7 @@ Content-Type: application/json
 
 {
     "username": "test",
-    "role": "doctor",
+    "role": "patient",
     "password": "123456"
 }
 
@@ -18,7 +18,7 @@ Content-Type: application/json
 
 {
     "username": "test",
-    "password": "123456"
+    "password": "1234567"
 }
 
 ###

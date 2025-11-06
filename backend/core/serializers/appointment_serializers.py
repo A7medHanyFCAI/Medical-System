@@ -1,6 +1,6 @@
 from django.utils import timezone
 from rest_framework import serializers
-from models.appointment import Appointment
+from core.models.appointment import Appointment
 
 class AppointmentSerializer(serializers.ModelSerializer):
     patient_name = serializers.CharField(source='patient.user.username', read_only=True)
