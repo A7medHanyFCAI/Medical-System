@@ -1,11 +1,13 @@
 from django.db import models
 from django.conf import settings
+from core.models.specialty import Specialty
+
 
 User = settings.AUTH_USER_MODEL
 
 class Doctor(models.Model):
-    user = models.OneToOneField(User,on_delete=models.CASCADE, related_name='doctor')
-    specialty = models.CharField(max_length=120, blank=True)
+    user = models.OneToOneField(User,on_delete=models.CASCADE, related_name='doctor_profile')
+    specialty = models.ForeignKey(Specialty,on_delete=models.SET_NULL,null=True)
     bio = models.TextField(blank=True)
     contact = models.CharField(max_length=80, blank=True)
     is_approved = models.BooleanField(default=False)
