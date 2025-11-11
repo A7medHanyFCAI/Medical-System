@@ -1,5 +1,5 @@
-# core/token_utils.py
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework import serializers
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -14,3 +14,10 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['role'] = self.user.role
         data['username'] = self.user.username
         return data
+    
+
+class LogoutSerializer(serializers.Serializer):
+    """
+    Used for blacklisting refresh tokens during logout.
+    """
+    refresh = serializers.CharField()
