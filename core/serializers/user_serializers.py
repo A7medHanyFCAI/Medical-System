@@ -1,20 +1,21 @@
-# serializers/user_serializers.py
-
 from rest_framework import serializers
-from ..models.user import User
+from core.models.user import User
 
-class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
-
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True, min_length=6)
+    
     class Meta:
         model = User
-        fields = ['id', 'username', 'role', 'password']
-        read_only_fields = ['id']
-
-    def create(self, validated_data):
-        # Use Django's create_user to hash the password properly
-        password = validated_data.pop('password')
-        user = User(**validated_data)
-        user.set_password(password)
-        user.save()
+        fields = ['username', 'email', 'password', 'role']
+        
+    def create(self, validate_data):
+        """
+        Create a new user with a hashed password.
+        """
+        user = User.objects.create_user(
+            username=validate_data['username'],
+            email=validate_data.get('email',''),
+            password=validate_data['password'],
+            role=validate_data['role']
+        )
         return user
