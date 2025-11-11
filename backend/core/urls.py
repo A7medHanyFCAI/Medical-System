@@ -11,6 +11,10 @@ from core.views.auth_views import (
 from core.views.availabilities_views import AvailabilityViewSet
 from core.views.user_views import UserListCreateView
 from core.views.doctor_views import DoctorRetrieveUpdateAPIView
+from core.views.patient_views import (
+    PatientAppointmentListCreateAPIView,
+    PatientAppointmentRetrieveUpdateAPIView,
+)
 
 
 router = DefaultRouter()
@@ -37,4 +41,14 @@ urlpatterns = [
         name="doctor-profile",
     ),
     path("users/", UserListCreateView.as_view(), name="user-view"),
+    path(
+        "patient/appointments/",
+        PatientAppointmentListCreateAPIView.as_view(),
+        name="patient-appointment-list-create",
+    ),
+    path(
+        "patient/appointments/<int:pk>/",
+        PatientAppointmentRetrieveUpdateAPIView.as_view(),
+        name="patient-appointment-detail",
+    ),
 ] + router.urls
