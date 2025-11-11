@@ -146,3 +146,8 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+# settings.py (development)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# OR to file:
+# EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+# EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'

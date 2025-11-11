@@ -10,6 +10,7 @@ class Appointment(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     start_date_time = models.DateTimeField()
     end_date_time = models.DateTimeField()
+    
 
 
     @property

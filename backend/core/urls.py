@@ -42,12 +42,12 @@ urlpatterns = [
     ),
     path("users/", UserListCreateView.as_view(), name="user-view"),
     path(
-        "patient/appointments/",
+        "api/patient/appointments/",
         PatientAppointmentListCreateAPIView.as_view(),
         name="patient-appointment-list-create",
     ),
     path(
-        "patient/appointments/<int:pk>/",
+        "api/patient/appointments/<int:pk>/",
         PatientAppointmentRetrieveUpdateAPIView.as_view(),
         name="patient-appointment-detail",
     ),

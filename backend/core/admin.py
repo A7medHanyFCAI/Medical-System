@@ -51,7 +51,6 @@ class DoctorAdmin(admin.ModelAdmin):
 @admin.register(Patient)
 class PatientAdmin(admin.ModelAdmin):
     list_display = ['get_username','age','contact']
-    list_filter = ['appointments__status']
     search_fields = ['user__username', 'user__email', 'contact']
     ordering = ['user__username']
     

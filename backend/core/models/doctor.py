@@ -6,7 +6,7 @@ from core.models.specialty import Specialty
 User = settings.AUTH_USER_MODEL
 
 class Doctor(models.Model):
-    user = models.OneToOneField(User,on_delete=models.CASCADE, related_name='doctor_profile')
+    user = models.OneToOneField(User,on_delete=models.CASCADE, related_name='doctor')
     specialty = models.ForeignKey(Specialty,on_delete=models.SET_NULL,null=True)
     bio = models.TextField(blank=True)
     contact = models.CharField(max_length=80, blank=True)
