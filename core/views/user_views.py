@@ -2,7 +2,7 @@
 
 from rest_framework import generics, permissions
 from ..models.user import User
-from ..serializers.user_serializers import UserSerializer
+from ..serializers.user_serializers import UserRegistrationSerializer
 
 
 class UserListCreateView(generics.ListCreateAPIView):
@@ -12,5 +12,5 @@ class UserListCreateView(generics.ListCreateAPIView):
     """
 
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = UserRegistrationSerializer
     permission_classes = [permissions.AllowAny]
