@@ -18,7 +18,7 @@ Content-Type: application/json
 
 {
     "username": "test",
-    "password": "1234567"
+    "password": "123456"
 }
 
 ###
@@ -65,7 +65,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 
 ### create
 POST http://localhost:8000/api/doctor/availabilities/ HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyODczMTA5LCJpYXQiOjE3NjI4NzI4MDksImp0aSI6IjUyYzk1MDQzNGM3MTQxZDJiMDIxNDYwMDgwNGEyNGE1IiwidXNlcl9pZCI6IjEwIiwicm9sZSI6ImRvY3RvciJ9.N80jKuc7liT0SLjsKeA0BhQooOPNk6rOglBRPFNI4Kw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyODgyOTE2LCJpYXQiOjE3NjI4ODI2MTYsImp0aSI6IjI3MTkyYjY0NmM3ZjRhN2I4MDMwNTBiYTRkOGQwZDA0IiwidXNlcl9pZCI6IjEwIiwicm9sZSI6ImRvY3RvciJ9.ms7YY9wiZBz5sfJsCq7qpUt42G7TyTlLls8dCjzRwVk
 Content-Type: application/json
 
 {
@@ -75,15 +75,15 @@ Content-Type: application/json
 
 ### list all
 GET http://localhost:8000/api/doctor/availabilities/ HTTP/1.1
-Authorization: Token <your_token_here>
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyODgyOTE2LCJpYXQiOjE3NjI4ODI2MTYsImp0aSI6IjI3MTkyYjY0NmM3ZjRhN2I4MDMwNTBiYTRkOGQwZDA0IiwidXNlcl9pZCI6IjEwIiwicm9sZSI6ImRvY3RvciJ9.ms7YY9wiZBz5sfJsCq7qpUt42G7TyTlLls8dCjzRwVk
 
 ### retrieve one
-GET http://localhost:8000/api/doctor/availabilities/<id>/ HTTP/1.1
-Authorization: Token <your_token_here>
+GET http://localhost:8000/api/doctor/availabilities/1/ HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyODgyOTE2LCJpYXQiOjE3NjI4ODI2MTYsImp0aSI6IjI3MTkyYjY0NmM3ZjRhN2I4MDMwNTBiYTRkOGQwZDA0IiwidXNlcl9pZCI6IjEwIiwicm9sZSI6ImRvY3RvciJ9.ms7YY9wiZBz5sfJsCq7qpUt42G7TyTlLls8dCjzRwVk
 
 ### update
-PATCH http://localhost:8000/api/doctor/availabilities/<id>/ HTTP/1.1
-Authorization: Token <your_token_here>
+PATCH http://localhost:8000/api/doctor/availabilities/1/ HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyODgyOTE2LCJpYXQiOjE3NjI4ODI2MTYsImp0aSI6IjI3MTkyYjY0NmM3ZjRhN2I4MDMwNTBiYTRkOGQwZDA0IiwidXNlcl9pZCI6IjEwIiwicm9sZSI6ImRvY3RvciJ9.ms7YY9wiZBz5sfJsCq7qpUt42G7TyTlLls8dCjzRwVk
 Content-Type: application/json
 
 {
@@ -91,5 +91,5 @@ Content-Type: application/json
 }
 
 ### delete
-DELETE http://localhost:8000/api/doctor/availabilities/<id>/ HTTP/1.1
-Authorization: Token <your_token_here>
+DELETE http://localhost:8000/api/doctor/availabilities/1/ HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyODgyOTE2LCJpYXQiOjE3NjI4ODI2MTYsImp0aSI6IjI3MTkyYjY0NmM3ZjRhN2I4MDMwNTBiYTRkOGQwZDA0IiwidXNlcl9pZCI6IjEwIiwicm9sZSI6ImRvY3RvciJ9.ms7YY9wiZBz5sfJsCq7qpUt42G7TyTlLls8dCjzRwVk

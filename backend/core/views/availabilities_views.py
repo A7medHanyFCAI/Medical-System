@@ -11,3 +11,8 @@ class AvailabilityViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         return Availability.objects.filter(doctor=user.doctor)
+
+    def perform_create(self, serializer):
+        # since the serializer doesn't handl user data.
+        # user data is only needed in creation of new avail.
+        serializer.save(doctor=self.request.user.doctor)

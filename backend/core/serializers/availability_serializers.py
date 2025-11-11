@@ -5,9 +5,8 @@ from ..models.availability import Availability
 class AvailabilitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Availability
-        fields = ["doctor", "start_time", "end_time"]
-        read_only_fields = ["doctor"]
-
+        fields = ["id", "start_time", "end_time"]
+        read_only_fields = ["id"]
 
 
 # could be used by admin to view all aval. with corresponding doctors
