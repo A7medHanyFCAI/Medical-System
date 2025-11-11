@@ -5,9 +5,12 @@ from ..models.availability import Availability
 class AvailabilitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Availability
-        fields = ["start_time", "end_time", "day_of_week"]
+        fields = ["doctor", "start_time", "end_time"]
+        read_only_fields = ["doctor"]
 
 
+
+# could be used by admin to view all aval. with corresponding doctors
 class AvailabilityDoctorSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
 
@@ -15,7 +18,7 @@ class AvailabilityDoctorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Availability
-        fields = ["id", "doctor", "start_time", "end_time", "day_of_week"]
+        fields = ["id", "doctor", "start_time", "end_time"]
 
     def get_doctor(self, obj):
         return {"id": obj.doctor.id, "name": obj.doctor.user.username}

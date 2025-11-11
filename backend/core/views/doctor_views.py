@@ -20,6 +20,7 @@ class DoctorDashboardView(APIView):
         return Response({"message": f"Welcome Dr. {user.username}"})
 
 
+# list & update authenticated doctor data
 class DoctorRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
     serializer_class = DoctorProfileSerializer
     permission_classes = [IsAuthenticated]
@@ -35,11 +36,12 @@ class DoctorRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
         except Doctor.DoesNotExist:
             raise NotFound("Doctor not found")
 
+
 class DoctorDashboardView(APIView):
     permission_classes = [IsAuthenticated]
-    
-    def get(self,request):
+
+    def get(self, request):
         user = request.user
-        if user.role != 'doctor':
+        if user.role != "doctor":
             return Response({"error": "You are not a doctor"}, status=403)
         return Response({"message": f"Welcome Dr. {user.username}"})

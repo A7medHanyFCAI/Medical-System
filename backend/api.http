@@ -60,22 +60,36 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
     "specialty": "Eye Diseases"
 }
 
-###
-GET http://localhost:8000/doctor/profile HTTP/1.1
 
+# availability ----------------
 
+### create
+POST http://localhost:8000/api/doctor/availabilities/ HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyODczMTA5LCJpYXQiOjE3NjI4NzI4MDksImp0aSI6IjUyYzk1MDQzNGM3MTQxZDJiMDIxNDYwMDgwNGEyNGE1IiwidXNlcl9pZCI6IjEwIiwicm9sZSI6ImRvY3RvciJ9.N80jKuc7liT0SLjsKeA0BhQooOPNk6rOglBRPFNI4Kw
+Content-Type: application/json
 
-###
+{
+    "start_time": "08:00:00",
+    "end_time": "10:00:00"
+}
 
-# GET http://localhost:8000/user-orders/ HTTP/1.1
-# Content-Type: application/json
-# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYxOTgzODEyLCJpYXQiOjE3NjE5ODM1MTIsImp0aSI6ImVmZjRhN2I4MDQwYTRkMDM5MmExYTJmZGE4NzFkNTQwIiwidXNlcl9pZCI6IjIifQ.8e9S9pC0QDxiwZpFm5Ol9cu5NnShd1rBPWH0omUPYMQ
+### list all
+GET http://localhost:8000/api/doctor/availabilities/ HTTP/1.1
+Authorization: Token <your_token_here>
 
-# ###
+### retrieve one
+GET http://localhost:8000/api/doctor/availabilities/<id>/ HTTP/1.1
+Authorization: Token <your_token_here>
 
-# POST http://localhost:8000/api/token/refresh/ HTTP/1.1
-# Content-Type: application/json
+### update
+PATCH http://localhost:8000/api/doctor/availabilities/<id>/ HTTP/1.1
+Authorization: Token <your_token_here>
+Content-Type: application/json
 
-# {
-#     "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2MjA3MDQxNywiaWF0IjoxNzYxOTg0MDE3LCJqdGkiOiIzMmNlZWU2MzAwNjU0YjAxOTM4MGU0NzE3ZGM4YzJlNyIsInVzZXJfaWQiOiIyIn0.l3Bq8AKyRb9NE4uKtTN2tQw-YhHRcLNjuWQfQRr-uhQ"
-# }
+{
+    "end_time": "11:00:00"
+}
+
+### delete
+DELETE http://localhost:8000/api/doctor/availabilities/<id>/ HTTP/1.1
+Authorization: Token <your_token_here>
