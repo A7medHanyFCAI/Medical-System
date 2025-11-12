@@ -1,17 +1,14 @@
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied,NotFound
 from ..serializers.appointment_serializers import AppointmentSerializer
 from ..models.appointment import Appointment
-from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.exceptions import PermissionDenied, NotFound
-from ..serializers.appointment_serializers import AppointmentSerializer
-from ..models.appointment import Appointment
+from ..serializers.doctor_serializers import DoctorProfileSerializer
+from ..models.doctor import Doctor
+
 
 class PatientDashboardView(APIView):
     permission_classes = [IsAuthenticated]
@@ -64,4 +61,13 @@ class PatientAppointmentRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
             return queryset.get(pk=self.kwargs['pk'])
         except Appointment.DoesNotExist:
             raise NotFound("Appointment not found")
+        
+        
+class DoctorListView(generics.ListAPIView):
+    """List all approved doctors"""
+    serializer_class = DoctorProfileSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        return Doctor.objects.filter(is_approved=True).select_related('user', 'specialty')
 
