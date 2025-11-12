@@ -35,7 +35,7 @@ POST http://localhost:8000/token/ HTTP/1.1
 Content-Type: application/json
 
 {
-    "username": "doctor1",
+    "username": "test",
     "password": "123456"
 }
 
@@ -43,25 +43,25 @@ Content-Type: application/json
 # Get doctor (auth)
 GET http://localhost:8000/api/doctor/dashboard/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyODY0MjcwLCJpYXQiOjE3NjI4NjM5NzAsImp0aSI6ImZlOTMxNmM0NWU0NjRkYmU5OGU2OTNlNzUyODZkOTllIiwidXNlcl9pZCI6IjgiLCJyb2xlIjoiZG9jdG9yIn0.FMScTYDpNXZSjcTxIxTwEy6v4PDAoBMaptN1ZyLbQUI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyOTY4MjU1LCJpYXQiOjE3NjI5Njc5NTUsImp0aSI6ImZkYmNlZjAwZjFlYjQ3ZTk4ODFmZmJkNDA4MTZhNjYwIiwidXNlcl9pZCI6IjMiLCJyb2xlIjoiZG9jdG9yIn0.iW2ZS2RsXWH0FlVuwENZhRxF8Mr_0xSHv3jSYEnylVg
 
 
 ### Retrieve your own doctor profile
 GET	http://localhost:8000/api/doctor/profile/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyODcwMDQwLCJpYXQiOjE3NjI4Njk3NDAsImp0aSI6IjBmOGE3MjgyYmI3MDQ5OWVhMzJmNTI3MWU5ODU2MDBlIiwidXNlcl9pZCI6IjEwIiwicm9sZSI6ImRvY3RvciJ9._gEFsNsMh5FYjT5VfsIn1inoarftQX36Zfl5rd3lm9M
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyOTY4MjU1LCJpYXQiOjE3NjI5Njc5NTUsImp0aSI6ImZkYmNlZjAwZjFlYjQ3ZTk4ODFmZmJkNDA4MTZhNjYwIiwidXNlcl9pZCI6IjMiLCJyb2xlIjoiZG9jdG9yIn0.iW2ZS2RsXWH0FlVuwENZhRxF8Mr_0xSHv3jSYEnylVg
 
 ### Update all fields (contact, bio, specialty)
 PUT http://localhost:8000/api/doctor/profile/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyODcwMDQwLCJpYXQiOjE3NjI4Njk3NDAsImp0aSI6IjBmOGE3MjgyYmI3MDQ5OWVhMzJmNTI3MWU5ODU2MDBlIiwidXNlcl9pZCI6IjEwIiwicm9sZSI6ImRvY3RvciJ9._gEFsNsMh5FYjT5VfsIn1inoarftQX36Zfl5rd3lm9M
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyOTY4MjU1LCJpYXQiOjE3NjI5Njc5NTUsImp0aSI6ImZkYmNlZjAwZjFlYjQ3ZTk4ODFmZmJkNDA4MTZhNjYwIiwidXNlcl9pZCI6IjMiLCJyb2xlIjoiZG9jdG9yIn0.iW2ZS2RsXWH0FlVuwENZhRxF8Mr_0xSHv3jSYEnylVg
 
 {
     "contact": "01124619944", 
     "bio": "Good Doc 2", 
-    "specialty": "Eye Diseases",
+    # "specialty": "<pk>",
     "user": {
-        "username": "mostafa",
+        "username": "ezz",
         "password": "011012" 
     }
 }
@@ -70,12 +70,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 ### Partially update fields
 PATCH http://localhost:8000/api/doctor/profile/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyODY1MTg4LCJpYXQiOjE3NjI4NjQ4ODgsImp0aSI6IjU2ZWFmZDJhYjIzODQzNTQ5NjUzN2RmM2Y4MzY3ODdiIiwidXNlcl9pZCI6IjgiLCJyb2xlIjoiZG9jdG9yIn0.1aqutNqW1jzi2NCFsHSIjyWw0K5xSheNUyKUs9OQUy8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyOTY4MjU1LCJpYXQiOjE3NjI5Njc5NTUsImp0aSI6ImZkYmNlZjAwZjFlYjQ3ZTk4ODFmZmJkNDA4MTZhNjYwIiwidXNlcl9pZCI6IjMiLCJyb2xlIjoiZG9jdG9yIn0.iW2ZS2RsXWH0FlVuwENZhRxF8Mr_0xSHv3jSYEnylVg
 
 {
     "contact": "01124619944", 
-    "bio": "Good Doc", 
-    "specialty": "Eye Diseases"
+    "bio": "Good Doc" 
 }
 
 
@@ -83,7 +82,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 
 ### create
 POST http://localhost:8000/api/doctor/availabilities/ HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyODg5MzkzLCJpYXQiOjE3NjI4ODkwOTMsImp0aSI6ImUwOGYzYzE4NTYzZTRkYmI4M2ZjYjMyYjQ0NDhkNTg0IiwidXNlcl9pZCI6IjEyIiwicm9sZSI6ImRvY3RvciJ9.nUVUHD9CtuijO4qkaV2n2xwdnrLekp112HY1HWWtLzo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyOTY4MjU1LCJpYXQiOjE3NjI5Njc5NTUsImp0aSI6ImZkYmNlZjAwZjFlYjQ3ZTk4ODFmZmJkNDA4MTZhNjYwIiwidXNlcl9pZCI6IjMiLCJyb2xlIjoiZG9jdG9yIn0.iW2ZS2RsXWH0FlVuwENZhRxF8Mr_0xSHv3jSYEnylVg
 Content-Type: application/json
 
 {
@@ -91,9 +90,28 @@ Content-Type: application/json
     "end_time": "10:00:00"
 }
 
+
+### retrieve one
+GET http://localhost:8000/api/doctor/availabilities/1/ HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyOTY4MjU1LCJpYXQiOjE3NjI5Njc5NTUsImp0aSI6ImZkYmNlZjAwZjFlYjQ3ZTk4ODFmZmJkNDA4MTZhNjYwIiwidXNlcl9pZCI6IjMiLCJyb2xlIjoiZG9jdG9yIn0.iW2ZS2RsXWH0FlVuwENZhRxF8Mr_0xSHv3jSYEnylVg
+
+### update
+PATCH http://localhost:8000/api/doctor/availabilities/1/ HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyOTY4MjU1LCJpYXQiOjE3NjI5Njc5NTUsImp0aSI6ImZkYmNlZjAwZjFlYjQ3ZTk4ODFmZmJkNDA4MTZhNjYwIiwidXNlcl9pZCI6IjMiLCJyb2xlIjoiZG9jdG9yIn0.iW2ZS2RsXWH0FlVuwENZhRxF8Mr_0xSHv3jSYEnylVg
+Content-Type: application/json
+
+{
+    "end_time": "11:00:00"
+}
+
+### delete
+DELETE http://localhost:8000/api/doctor/availabilities/1/ HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyOTY4MjU1LCJpYXQiOjE3NjI5Njc5NTUsImp0aSI6ImZkYmNlZjAwZjFlYjQ3ZTk4ODFmZmJkNDA4MTZhNjYwIiwidXNlcl9pZCI6IjMiLCJyb2xlIjoiZG9jdG9yIn0.iW2ZS2RsXWH0FlVuwENZhRxF8Mr_0xSHv3jSYEnylVg
+
+
 ### list all appointments
 GET http://localhost:8000/api/patient/appointments/ HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyODg3NjU0LCJpYXQiOjE3NjI4ODczNTQsImp0aSI6ImU0YWEyNjdmMTQ5NzQ1NGU4NWQ2YWYxZGRkYTVjZmFkIiwidXNlcl9pZCI6IjExIiwicm9sZSI6InBhdGllbnQifQ.oSLyjG0jbgxLHIykdGoNxB2O5yju_URvAKJO7LGnZko
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyOTY4MjU1LCJpYXQiOjE3NjI5Njc5NTUsImp0aSI6ImZkYmNlZjAwZjFlYjQ3ZTk4ODFmZmJkNDA4MTZhNjYwIiwidXNlcl9pZCI6IjMiLCJyb2xlIjoiZG9jdG9yIn0.iW2ZS2RsXWH0FlVuwENZhRxF8Mr_0xSHv3jSYEnylVg
 ### create an appointments
 POST http://localhost:8000/api/patient/appointments/
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyODg3NjU0LCJpYXQiOjE3NjI4ODczNTQsImp0aSI6ImU0YWEyNjdmMTQ5NzQ1NGU4NWQ2YWYxZGRkYTVjZmFkIiwidXNlcl9pZCI6IjExIiwicm9sZSI6InBhdGllbnQifQ.oSLyjG0jbgxLHIykdGoNxB2O5yju_URvAKJO7LGnZko
@@ -104,20 +122,3 @@ Content-Type: application/json
   "start_date_time": "2025-11-12T10:00:00Z",
   "end_date_time": "2025-11-12T10:30:00Z"
 }
-
-### retrieve one
-GET http://localhost:8000/api/doctor/availabilities/1/ HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyODgyOTE2LCJpYXQiOjE3NjI4ODI2MTYsImp0aSI6IjI3MTkyYjY0NmM3ZjRhN2I4MDMwNTBiYTRkOGQwZDA0IiwidXNlcl9pZCI6IjEwIiwicm9sZSI6ImRvY3RvciJ9.ms7YY9wiZBz5sfJsCq7qpUt42G7TyTlLls8dCjzRwVk
-
-### update
-PATCH http://localhost:8000/api/doctor/availabilities/1/ HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyODgyOTE2LCJpYXQiOjE3NjI4ODI2MTYsImp0aSI6IjI3MTkyYjY0NmM3ZjRhN2I4MDMwNTBiYTRkOGQwZDA0IiwidXNlcl9pZCI6IjEwIiwicm9sZSI6ImRvY3RvciJ9.ms7YY9wiZBz5sfJsCq7qpUt42G7TyTlLls8dCjzRwVk
-Content-Type: application/json
-
-{
-    "end_time": "11:00:00"
-}
-
-### delete
-DELETE http://localhost:8000/api/doctor/availabilities/1/ HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyODgyOTE2LCJpYXQiOjE3NjI4ODI2MTYsImp0aSI6IjI3MTkyYjY0NmM3ZjRhN2I4MDMwNTBiYTRkOGQwZDA0IiwidXNlcl9pZCI6IjEwIiwicm9sZSI6ImRvY3RvciJ9.ms7YY9wiZBz5sfJsCq7qpUt42G7TyTlLls8dCjzRwVk

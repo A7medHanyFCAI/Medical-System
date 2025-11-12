@@ -18,29 +18,43 @@ from core.views.patient_views import (
 
 
 router = DefaultRouter()
+# Register availability routes
 router.register(
-    "api/doctor/availabilities", AvailabilityViewSet, basename="doctor-availability"
+    "api/availabilities", 
+    AvailabilityViewSet, 
+    basename="availability"
 )
 
 urlpatterns = [
+    # Authentication
     path("token/", MyTokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/register/", UserRegistrationView.as_view(), name="user-register"),
+    path("api/logout/", LogoutView.as_view(), name="token_logout"),
+    
+    # Dashboards
     path(
-        "api/doctor/dashboard/", DoctorDashboardView.as_view(), name="doctor-dashboard"
+        "api/doctor/dashboard/", 
+        DoctorDashboardView.as_view(), 
+        name="doctor-dashboard"
     ),
     path(
         "api/patient/dashboard/",
         PatientDashboardView.as_view(),
         name="patient-dashboard",
     ),
-    path("api/logout/", LogoutView.as_view(), name="token_logout"),
+    
+    # Doctor Profile
     path(
         "api/doctor/profile/",
         DoctorRetrieveUpdateAPIView.as_view(),
         name="doctor-profile",
     ),
+    
+    # Users
     path("users/", UserListCreateView.as_view(), name="user-view"),
+    
+    # Patient Appointments
     path(
         "api/patient/appointments/",
         PatientAppointmentListCreateAPIView.as_view(),
