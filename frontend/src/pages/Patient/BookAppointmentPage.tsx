@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axiosClient from '../../api/axiosClient';
@@ -17,7 +18,7 @@ interface Availability {
 }
 
 interface Doctor {
-  id: number;
+  doctor_id: number;
   user: { username: string };
   specialty: { name: string } | null;
 }
@@ -31,6 +32,7 @@ const BookAppointmentPage = () => {
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [initialLoading, setInitialLoading] = useState(true);
 
   useEffect(() => {
     fetchDoctor();
@@ -44,25 +46,39 @@ const BookAppointmentPage = () => {
       const response = await axiosClient.get('/api/doctors/', {
         headers: { Authorization: `Bearer ${token}` }
       });
-      const foundDoctor = response.data.find((d: Doctor) => d.id === parseInt(doctorId!));
+      const foundDoctor = response.data.find((d: Doctor) => d.doctor_id === parseInt(doctorId!));
       setDoctor(foundDoctor);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      console.log('Doctor found:', foundDoctor);
     } catch (err) {
-      console.error('Failed to load doctor info');
+      console.error('Failed to load doctor info:', err);
+      setError('Failed to load doctor information');
     }
   };
 
   const fetchAvailabilities = async () => {
+    setInitialLoading(true);
+    setError('');
     try {
       const token = localStorage.getItem('access_token');
+      console.log('Fetching availabilities for doctor:', doctorId);
+      
       const response = await axiosClient.get(
         `/api/availabilities/by_doctor/?doctor_id=${doctorId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      
+      console.log('Availabilities response:', response.data);
       setAvailabilities(response.data);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (err) {
-      setError('Failed to load availabilities');
+      
+      if (response.data.length === 0) {
+        setError('This doctor has no available slots at the moment.');
+      }
+    } catch (err: any) {
+      console.error('Failed to load availabilities:', err);
+      console.error('Error response:', err.response?.data);
+      setError(err.response?.data?.detail || 'Failed to load doctor availability');
+    } finally {
+      setInitialLoading(false);
     }
   };
 
@@ -77,9 +93,15 @@ const BookAppointmentPage = () => {
     try {
       const token = localStorage.getItem('access_token');
       
-      // Format datetime properly - remove 'Z' suffix for local time
+      // Format datetime properly
       const startDateTime = `${selectedDate}T${selectedSlot.start_time}:00`;
       const endDateTime = `${selectedDate}T${selectedSlot.end_time}:00`;
+
+      console.log('Booking appointment:', {
+        doctor: parseInt(doctorId!),
+        start_date_time: startDateTime,
+        end_date_time: endDateTime
+      });
 
       await axiosClient.post(
         '/api/patient/appointments/',
@@ -95,8 +117,12 @@ const BookAppointmentPage = () => {
       navigate('/patient/appointments');
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
+      console.error('Booking error:', err);
+      console.error('Error response:', err.response?.data);
+      
       const errorMsg = err.response?.data?.detail || 
                        err.response?.data?.non_field_errors?.[0] ||
+                       JSON.stringify(err.response?.data) ||
                        'Failed to book appointment';
       setError(errorMsg);
     } finally {
@@ -104,10 +130,13 @@ const BookAppointmentPage = () => {
     }
   };
 
-  if (!doctor && !error) {
+  if (initialLoading) {
     return (
       <div className="max-w-4xl mx-auto p-6">
-        <div className="text-center py-12">Loading...</div>
+        <div className="text-center py-12">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
+          <p className="text-gray-600">Loading doctor information...</p>
+        </div>
       </div>
     );
   }
@@ -126,29 +155,43 @@ const BookAppointmentPage = () => {
         </div>
         <button
           onClick={() => navigate('/patient/doctors')}
-          className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+          className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
         >
           Back
         </button>
       </div>
 
-      {error && (
-        <div className="bg-red-100 text-red-700 p-4 rounded mb-6">
-          {error}
-        </div>
-      )}
-
-      {availabilities.length === 0 ? (
-        <div className="bg-yellow-100 text-yellow-800 p-6 rounded-lg text-center">
-          <p>This doctor has no available slots at the moment.</p>
+      {error && !availabilities.length && (
+        <div className="bg-yellow-100 border border-yellow-400 text-yellow-800 p-6 rounded-lg text-center mb-6">
+          <p className="mb-4">{error}</p>
           <button
             onClick={() => navigate('/patient/doctors')}
-            className="mt-4 bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+            className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition"
           >
             Find Another Doctor
           </button>
         </div>
-      ) : (
+      )}
+
+      {error && availabilities.length > 0 && (
+        <div className="bg-red-100 border border-red-400 text-red-700 p-4 rounded mb-6">
+          {error}
+        </div>
+      )}
+
+      {availabilities.length === 0 && !initialLoading && !error && (
+        <div className="bg-yellow-100 text-yellow-800 p-6 rounded-lg text-center">
+          <p className="mb-4">This doctor has no available slots at the moment.</p>
+          <button
+            onClick={() => navigate('/patient/doctors')}
+            className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition"
+          >
+            Find Another Doctor
+          </button>
+        </div>
+      )}
+
+      {availabilities.length > 0 && (
         <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-semibold mb-4">Select Date</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -156,8 +199,11 @@ const BookAppointmentPage = () => {
               <button
                 key={avail.id}
                 onClick={() => {
+                  console.log('Selected date:', avail.date);
+                  console.log('Available slots:', avail.time_slots);
                   setSelectedDate(avail.date);
                   setSelectedSlot(null);
+                  setError('');
                 }}
                 className={`p-4 border-2 rounded transition ${
                   selectedDate === avail.date
@@ -168,7 +214,8 @@ const BookAppointmentPage = () => {
                 <div className="font-semibold">
                   {new Date(avail.date).toLocaleDateString('en-US', {
                     month: 'short',
-                    day: 'numeric'
+                    day: 'numeric',
+                    year: 'numeric'
                   })}
                 </div>
                 <div className="text-xs mt-1">
@@ -176,46 +223,67 @@ const BookAppointmentPage = () => {
                     weekday: 'short'
                   })}
                 </div>
+                <div className="text-xs mt-1 opacity-75">
+                  {avail.time_slots.filter(s => s.is_available).length} slots
+                </div>
               </button>
             ))}
           </div>
 
           {selectedAvailability && (
             <>
-              <h2 className="text-xl font-semibold mb-4">Select Time Slot</h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-6">
-                {selectedAvailability.time_slots.map((slot, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => slot.is_available && setSelectedSlot(slot)}
-                    disabled={!slot.is_available}
-                    className={`p-3 border-2 rounded transition ${
-                      selectedSlot === slot
-                        ? 'bg-blue-500 text-white border-blue-500'
-                        : slot.is_available
-                        ? 'bg-white hover:bg-gray-100 border-gray-300'
-                        : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
-                    }`}
-                  >
-                    <div className="font-medium">
-                      {slot.start_time}
-                    </div>
-                    <div className="text-xs mt-1">
-                      {slot.end_time}
-                    </div>
-                    {!slot.is_available && (
-                      <div className="text-xs mt-1 font-semibold">Booked</div>
-                    )}
-                  </button>
-                ))}
-              </div>
+              <h2 className="text-xl font-semibold mb-4">
+                Select Time Slot
+                <span className="text-sm font-normal text-gray-600 ml-2">
+                  ({selectedAvailability.time_slots.filter(s => s.is_available).length} available)
+                </span>
+              </h2>
+              
+              {selectedAvailability.time_slots.length === 0 ? (
+                <div className="text-center py-8 bg-gray-50 rounded">
+                  <p className="text-gray-600">No time slots available for this date</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-6">
+                  {selectedAvailability.time_slots.map((slot, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => {
+                        if (slot.is_available) {
+                          console.log('Selected slot:', slot);
+                          setSelectedSlot(slot);
+                          setError('');
+                        }
+                      }}
+                      disabled={!slot.is_available}
+                      className={`p-3 border-2 rounded transition ${
+                        selectedSlot === slot
+                          ? 'bg-blue-500 text-white border-blue-500 shadow-lg'
+                          : slot.is_available
+                          ? 'bg-white hover:bg-blue-50 border-gray-300 hover:border-blue-300'
+                          : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                      }`}
+                    >
+                      <div className="font-medium">
+                        {slot.start_time}
+                      </div>
+                      <div className="text-xs mt-1">
+                        {slot.end_time}
+                      </div>
+                      {!slot.is_available && (
+                        <div className="text-xs mt-1 font-semibold text-red-600">Booked</div>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
 
               <button
                 onClick={handleBooking}
                 disabled={!selectedSlot || loading}
                 className="w-full bg-green-500 text-white py-3 rounded font-semibold hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition"
               >
-                {loading ? 'Booking...' : selectedSlot ? `Confirm Booking for ${selectedSlot.start_time}` : 'Select a Time Slot'}
+                {loading ? 'Booking...' : selectedSlot ? `Confirm Booking for ${selectedSlot.start_time} - ${selectedSlot.end_time}` : 'Select a Time Slot'}
               </button>
             </>
           )}

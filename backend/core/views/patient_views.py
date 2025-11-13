@@ -1,12 +1,11 @@
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.exceptions import PermissionDenied,NotFound
+from rest_framework.exceptions import PermissionDenied, NotFound
 from ..serializers.appointment_serializers import AppointmentSerializer
 from ..models.appointment import Appointment
-from ..serializers.doctor_serializers import DoctorProfileSerializer
+from ..serializers.doctor_serializers import DoctorListSerializer
 from ..models.doctor import Doctor
 
 
@@ -18,7 +17,6 @@ class PatientDashboardView(APIView):
         if user.role != 'patient':
             return Response({"error": "You are not a patient"}, status=403)
         return Response({"message": f"Welcome {user.username}!"})
-
 
 
 class PatientAppointmentListCreateAPIView(generics.ListCreateAPIView):
@@ -36,12 +34,11 @@ class PatientAppointmentListCreateAPIView(generics.ListCreateAPIView):
         if user.role != "patient":
             raise PermissionDenied("Only patients can create appointments")
         
-        patient = getattr(user, 'patient', None)
+        patient = getattr(user, 'patient_profile', None)
         if not patient:
             raise PermissionDenied("No patient profile found for this user")
         
         serializer.save(patient=patient)
-
 
 
 class PatientAppointmentRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
@@ -61,13 +58,12 @@ class PatientAppointmentRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
             return queryset.get(pk=self.kwargs['pk'])
         except Appointment.DoesNotExist:
             raise NotFound("Appointment not found")
-        
-        
+
+
 class DoctorListView(generics.ListAPIView):
-    """List all approved doctors"""
-    serializer_class = DoctorProfileSerializer
+    """List all approved doctors with proper serialization"""
+    serializer_class = DoctorListSerializer
     permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
         return Doctor.objects.filter(is_approved=True).select_related('user', 'specialty')
-
