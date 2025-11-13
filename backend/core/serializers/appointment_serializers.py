@@ -25,7 +25,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
             'duration',
             'date',
         ]
-        read_only_fields = ['duration', 'date', 'patient_name', 'doctor_name', 'specialty']
+        read_only_fields = ['duration', 'date', 'patient_name', 'doctor_name', 'specialty', 'patient']
 
     def validate(self, data):
         """

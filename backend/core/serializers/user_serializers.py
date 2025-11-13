@@ -38,8 +38,12 @@ class UserProfileSerializer(serializers.ModelSerializer):
         if self.instance and self.instance.username == value:
             return value
         
-        # Otherwise, check if username already exists
-        if User.objects.filter(username=value).exists():
+        # Otherwise, check if username already exists (excluding current instance)
+        queryset = User.objects.filter(username=value)
+        if self.instance:
+            queryset = queryset.exclude(pk=self.instance.pk)
+        
+        if queryset.exists():
             raise serializers.ValidationError("A user with that username already exists.")
         
         return value
