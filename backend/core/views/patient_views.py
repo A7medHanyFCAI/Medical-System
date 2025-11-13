@@ -7,8 +7,8 @@ from ..serializers.appointment_serializers import AppointmentSerializer
 from ..models.appointment import Appointment
 from ..serializers.doctor_serializers import DoctorListSerializer
 from ..models.doctor import Doctor
-from ..serializers.patient_serializers import PatientProfileSerializer  # noqa: E402
-from ..models.patient import Patient  # noqa: E402
+from ..serializers.patient_serializers import PatientProfileSerializer
+from ..models.patient import Patient
 
 
 class PatientDashboardView(APIView):
@@ -36,10 +36,17 @@ class PatientAppointmentListCreateAPIView(generics.ListCreateAPIView):
         if user.role != "patient":
             raise PermissionDenied("Only patients can create appointments")
         
-        patient = getattr(user, 'patient_profile', None)
+        # Get patient profile - check both possible related names
+        patient = None
+        if hasattr(user, 'patient_profile'):
+            patient = user.patient_profile
+        elif hasattr(user, 'patient'):
+            patient = user.patient
+        
         if not patient:
             raise PermissionDenied("No patient profile found for this user")
         
+        # Save with patient automatically set
         serializer.save(patient=patient)
 
 
@@ -69,12 +76,6 @@ class DoctorListView(generics.ListAPIView):
     
     def get_queryset(self):
         return Doctor.objects.filter(is_approved=True).select_related('user', 'specialty')
-    
-    
-
-
-
-
 
 
 class PatientRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
@@ -89,6 +90,12 @@ class PatientRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
             raise PermissionDenied("Not a patient")
         
         try:
-            return Patient.objects.get(user=user)
+            # Check both possible related names
+            if hasattr(user, 'patient_profile'):
+                return user.patient_profile
+            elif hasattr(user, 'patient'):
+                return user.patient
+            else:
+                raise Patient.DoesNotExist
         except Patient.DoesNotExist:
             raise NotFound("Patient profile not found")

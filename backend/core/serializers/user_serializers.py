@@ -28,7 +28,21 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["id", "username", "email", "password", "role"]
-        read_only_fields = ["id"]  # ID should not be editable
+        read_only_fields = ["id"]
+
+    def validate_username(self, value):
+        """
+        Check that username is unique, but allow keeping the same username on update
+        """
+        # If this is an update (instance exists) and username hasn't changed, skip validation
+        if self.instance and self.instance.username == value:
+            return value
+        
+        # Otherwise, check if username already exists
+        if User.objects.filter(username=value).exists():
+            raise serializers.ValidationError("A user with that username already exists.")
+        
+        return value
 
     def update(self, instance, validated_data):
         # Only update provided fields
