@@ -7,6 +7,8 @@ from ..serializers.appointment_serializers import AppointmentSerializer
 from ..models.appointment import Appointment
 from ..serializers.doctor_serializers import DoctorListSerializer
 from ..models.doctor import Doctor
+from ..serializers.patient_serializers import PatientProfileSerializer  # noqa: E402
+from ..models.patient import Patient  # noqa: E402
 
 
 class PatientDashboardView(APIView):
@@ -67,3 +69,26 @@ class DoctorListView(generics.ListAPIView):
     
     def get_queryset(self):
         return Doctor.objects.filter(is_approved=True).select_related('user', 'specialty')
+    
+    
+
+
+
+
+
+
+class PatientRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
+    """Retrieve and update authenticated patient's profile"""
+    serializer_class = PatientProfileSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_object(self):
+        user = self.request.user
+        
+        if user.role != "patient":
+            raise PermissionDenied("Not a patient")
+        
+        try:
+            return Patient.objects.get(user=user)
+        except Patient.DoesNotExist:
+            raise NotFound("Patient profile not found")

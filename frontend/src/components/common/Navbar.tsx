@@ -36,12 +36,14 @@ const Navbar = () => {
 
   const getDoctorLinks = () => [
     { path: '/doctor', label: 'Dashboard', icon: '🏠' },
+    { path: '/doctor/profile', label: 'My Profile', icon: '👤' },
     { path: '/doctor/availability', label: 'Availability', icon: '📅' },
     { path: '/doctor/appointments', label: 'Appointments', icon: '📋' },
   ];
 
   const getPatientLinks = () => [
     { path: '/patient', label: 'Dashboard', icon: '🏠' },
+    { path: '/patient/profile', label: 'My Profile', icon: '👤' },
     { path: '/patient/doctors', label: 'Find Doctors', icon: '🔍' },
     { path: '/patient/appointments', label: 'My Appointments', icon: '📋' },
   ];
@@ -85,7 +87,10 @@ const Navbar = () => {
 
           {/* User Menu */}
           <div className="hidden md:flex items-center space-x-4">
-            <div className="flex items-center space-x-2 text-gray-700">
+            <button
+              onClick={() => navigate(role === 'doctor' ? '/doctor/profile' : '/patient/profile')}
+              className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 transition"
+            >
               <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
                 {username.charAt(0).toUpperCase()}
               </div>
@@ -93,7 +98,7 @@ const Navbar = () => {
                 <div className="font-semibold">{username}</div>
                 <div className="text-gray-500 text-xs capitalize">{role}</div>
               </div>
-            </div>
+            </button>
             <button
               onClick={handleLogout}
               className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition font-medium"
@@ -133,15 +138,21 @@ const Navbar = () => {
         <div className="md:hidden border-t border-gray-200">
           <div className="px-4 pt-2 pb-3 space-y-1">
             {/* User Info */}
-            <div className="flex items-center space-x-3 px-3 py-2 mb-2 bg-gray-50 rounded-lg">
+            <button
+              onClick={() => {
+                navigate(role === 'doctor' ? '/doctor/profile' : '/patient/profile');
+                setIsMenuOpen(false);
+              }}
+              className="w-full flex items-center space-x-3 px-3 py-2 mb-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
+            >
               <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
                 {username.charAt(0).toUpperCase()}
               </div>
-              <div>
+              <div className="text-left">
                 <div className="font-semibold text-gray-800">{username}</div>
                 <div className="text-gray-500 text-sm capitalize">{role}</div>
               </div>
-            </div>
+            </button>
 
             {/* Navigation Links */}
             {links.map((link) => (

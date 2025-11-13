@@ -48,7 +48,6 @@ const BookAppointmentPage = () => {
       });
       const foundDoctor = response.data.find((d: Doctor) => d.doctor_id === parseInt(doctorId!));
       setDoctor(foundDoctor);
-      console.log('Doctor found:', foundDoctor);
     } catch (err) {
       console.error('Failed to load doctor info:', err);
       setError('Failed to load doctor information');
@@ -60,14 +59,12 @@ const BookAppointmentPage = () => {
     setError('');
     try {
       const token = localStorage.getItem('access_token');
-      console.log('Fetching availabilities for doctor:', doctorId);
       
       const response = await axiosClient.get(
         `/api/availabilities/by_doctor/?doctor_id=${doctorId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       
-      console.log('Availabilities response:', response.data);
       setAvailabilities(response.data);
       
       if (response.data.length === 0) {
@@ -75,7 +72,6 @@ const BookAppointmentPage = () => {
       }
     } catch (err: any) {
       console.error('Failed to load availabilities:', err);
-      console.error('Error response:', err.response?.data);
       setError(err.response?.data?.detail || 'Failed to load doctor availability');
     } finally {
       setInitialLoading(false);
@@ -93,9 +89,10 @@ const BookAppointmentPage = () => {
     try {
       const token = localStorage.getItem('access_token');
       
-      // Format datetime properly
-      const startDateTime = `${selectedDate}T${selectedSlot.start_time}:00`;
-      const endDateTime = `${selectedDate}T${selectedSlot.end_time}:00`;
+      // FIXED: Format datetime properly with Z suffix for UTC
+      // Combine date and time, then add seconds and timezone
+      const startDateTime = `${selectedDate}T${selectedSlot.start_time}:00Z`;
+      const endDateTime = `${selectedDate}T${selectedSlot.end_time}:00Z`;
 
       console.log('Booking appointment:', {
         doctor: parseInt(doctorId!),
@@ -110,20 +107,42 @@ const BookAppointmentPage = () => {
           start_date_time: startDateTime,
           end_date_time: endDateTime
         },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { 
+          headers: { 
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          } 
+        }
       );
 
-      alert('Appointment booked successfully!');
+      alert('✅ Appointment booked successfully!');
       navigate('/patient/appointments');
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error('Booking error:', err);
       console.error('Error response:', err.response?.data);
       
-      const errorMsg = err.response?.data?.detail || 
-                       err.response?.data?.non_field_errors?.[0] ||
-                       JSON.stringify(err.response?.data) ||
-                       'Failed to book appointment';
+      // Better error handling
+      let errorMsg = 'Failed to book appointment';
+      
+      if (err.response?.data) {
+        const errorData = err.response.data;
+        if (typeof errorData === 'string') {
+          errorMsg = errorData;
+        } else if (errorData.detail) {
+          errorMsg = errorData.detail;
+        } else if (errorData.non_field_errors) {
+          errorMsg = errorData.non_field_errors.join(', ');
+        } else if (Array.isArray(errorData)) {
+          errorMsg = errorData.join(', ');
+        } else {
+          // Handle field-specific errors
+          const errors = Object.entries(errorData)
+            .map(([key, value]) => `${key}: ${Array.isArray(value) ? value.join(', ') : value}`)
+            .join('; ');
+          errorMsg = errors || JSON.stringify(errorData);
+        }
+      }
+      
       setError(errorMsg);
     } finally {
       setLoading(false);
@@ -175,7 +194,8 @@ const BookAppointmentPage = () => {
 
       {error && availabilities.length > 0 && (
         <div className="bg-red-100 border border-red-400 text-red-700 p-4 rounded mb-6">
-          {error}
+          <p className="font-semibold mb-2">⚠️ Booking Error:</p>
+          <p className="text-sm">{error}</p>
         </div>
       )}
 
@@ -199,8 +219,6 @@ const BookAppointmentPage = () => {
               <button
                 key={avail.id}
                 onClick={() => {
-                  console.log('Selected date:', avail.date);
-                  console.log('Available slots:', avail.time_slots);
                   setSelectedDate(avail.date);
                   setSelectedSlot(null);
                   setError('');
@@ -250,7 +268,6 @@ const BookAppointmentPage = () => {
                       key={idx}
                       onClick={() => {
                         if (slot.is_available) {
-                          console.log('Selected slot:', slot);
                           setSelectedSlot(slot);
                           setError('');
                         }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import axiosClient from "../../api/axiosClient";
 import { useNavigate } from "react-router-dom";
@@ -40,7 +41,6 @@ const LoginForm = () => {
       } else {
         navigate("/");
       }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       if (err.response?.data?.detail) {
         setError(err.response.data.detail);
@@ -52,6 +52,11 @@ const LoginForm = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Admin redirect handler
+  const handleAdminAccess = () => {
+    window.location.href = "http://127.0.0.1:8000/admin";
   };
 
   return (
@@ -115,6 +120,17 @@ const LoginForm = () => {
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
+
+        {/* Admin Access Button */}
+        <div className="mt-4">
+          <button
+            onClick={handleAdminAccess}
+            className="w-full py-3 rounded-lg font-semibold text-white bg-purple-600 hover:bg-purple-700 transition flex items-center justify-center space-x-2"
+          >
+            <span>🔐</span>
+            <span>Admin Dashboard</span>
+          </button>
+        </div>
 
         {/* Register Link */}
         <div className="mt-6 text-center">

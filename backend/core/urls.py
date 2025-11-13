@@ -18,6 +18,7 @@ from core.views.patient_views import (
 from core.views.doctor_views import DoctorAppointmentListView
 from core.views.patient_views import DoctorListView
 from core.views.specialty_views import SpecialtyListView
+from core.views.patient_views import PatientRetrieveUpdateAPIView
 
 
 router = DefaultRouter()
@@ -75,4 +76,8 @@ urlpatterns = [
     
     # Specialties
     path('api/specialties/', SpecialtyListView.as_view(), name='specialties-list'),
+    path(
+    "api/patient/profile/",
+    PatientRetrieveUpdateAPIView.as_view(),
+    name="patient-profile"),
 ] + router.urls
